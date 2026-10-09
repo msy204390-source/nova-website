@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f8fc">
+<title>NOVA | تصميم وتطوير المواقع الإلكترونية</title>
+<meta name="description" content="NOVA علامة متخصصة في تصميم وتطوير المواقع الإلكترونية: واجهات عصرية، مواقع سريعة ومتجاوبة، وصفحات هبوط تحوّل زوارك إلى عملاء.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NOVA">
+<meta property="og:title" content="NOVA | تصميم وتطوير المواقع">
+<meta property="og:description" content="مواقع احترافية سريعة ومتجاوبة تعكس علامتك وتجذب عملاءك.">
+<meta property="og:locale" content="ar_AR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%236c5ce7'/%3E%3Cpath d='M11 29V11l18 18V11' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<!-- يضبط الوضع (داكن/فاتح) قبل رسم الصفحة لتجنب الوميض -->
+<script>
+(function(){
+  var d = document.documentElement;
+  d.classList.add('js');
+  var m = null;
+  try { m = localStorage.getItem('nova-theme'); } catch(e) {}
+  if (m !== 'dark' && m !== 'light') {
+    m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  d.setAttribute('data-theme', m);
+})();
+</script>
+
+<style>
+/* ========== 1) المتغيرات (عدّل الألوان من هنا) ========== */
+:root{
+  color-scheme:light;
+  --primary:#6c5ce7;
+  --primary-2:#00cec9;
+  --primary-soft:rgba(108,92,231,.14);
+  --glow:rgba(108,92,231,.4);
+  --bg:#f7f8fc;
+  --header-bg:rgba(247,248,252,.88);
+  --surface:#ffffff;
+  --text:#14172b;
+  --muted:#5d6380;
+  --border:#e4e7f2;
+  --shadow:0 10px 30px rgba(40,40,90,.08);
+  --radius:20px;
+  --header-h:68px;
+}
+[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0b0d1a;
+  --header-bg:rgba(11,13,26,.88);
+  --surface:#141830;
+  --text:#f1f3ff;
+  --muted:#a3a9c9;
+  --border:#252a4a;
+  --shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+/* ========== 2) الأساسيات ========== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{
+  scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 8px);
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
+}
+body{
+  font-family:'Cairo',system-ui,-apple-system,'Segoe UI',Roboto,Tahoma,Arial,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.8;overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+button,input,textarea{font-family:inherit;font-size:1rem}
+.container{width:min(1150px,92%);margin-inline:auto}
+section{padding:72px 0}
+.grad{
+  background:linear-gradient(90deg,var(--primary),var(--primary-2));
+  -webkit-background-clip:text;background-clip:text;
+  color:var(--primary);-webkit-text-fill-color:transparent;
+}
+.section-head{text-align:center;max-width:620px;margin:0 auto 44px}
+.section-head .tag{display:inline-block;padding:4px 14px;border-radius:99px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:.85rem;margin-bottom:10px}
+.section-head h2{font-size:clamp(1.6rem,5vw,2.3rem);line-height:1.4;margin-bottom:8px}
+.section-head p{color:var(--muted)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:14px;border:0;cursor:pointer;
+  font-weight:700;transition:transform .2s,box-shadow .2s,border-color .2s,color .2s;min-height:48px;
+  -webkit-appearance:none;appearance:none;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#6c5ce7;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 22px var(--glow);text-shadow:0 1px 2px rgba(0,0,0,.28)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+@media (hover:hover){
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+}
+:focus-visible{outline:3px solid var(--primary-2);outline-offset:2px}
+
+/* ========== 3) الهيدر ========== */
+header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:50;
+  background:var(--header-bg);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:100%}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.4rem;letter-spacing:1px}
+.logo svg{width:34px;height:34px;flex-shrink:0}
+.nav-links{display:flex;gap:clamp(14px,2vw,26px);font-weight:600}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--primary)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.icon-btn{
+  width:44px;height:44px;border-radius:12px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);cursor:pointer;font-size:1.1rem;line-height:1;
+  display:grid;place-items:center;-webkit-appearance:none;appearance:none;
+}
+.menu-btn{display:none;font-family:Arial,sans-serif}
+
+/* ========== 4) Hero ========== */
+.hero{padding-top:calc(var(--header-h) + 56px);position:relative;overflow:hidden;isolation:isolate}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;z-index:-1;animation:float 10s ease-in-out infinite;pointer-events:none}
+.blob.b1{width:320px;height:320px;background:var(--primary);top:-60px;right:-80px}
+.blob.b2{width:280px;height:280px;background:var(--primary-2);bottom:-40px;left:-60px;animation-delay:-5s}
+@keyframes float{50%{transform:translateY(30px) scale(1.06)}}
+@keyframes floatSoft{50%{transform:translateY(-12px)}}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.badge{display:inline-flex;gap:8px;align-items:center;padding:6px 16px;border-radius:99px;background:var(--surface);border:1px solid var(--border);font-size:.9rem;font-weight:600;margin-bottom:18px}
+.badge i{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}100%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}
+.hero h1{font-size:clamp(2rem,7vw,3.4rem);line-height:1.35;font-weight:900;margin-bottom:16px}
+.hero p.lead{color:var(--muted);font-size:1.08rem;max-width:520px;margin-bottom:26px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px}
+.stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap}
+.stats b{display:block;font-size:1.6rem;font-weight:900;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:.9rem}
+.hero-visual{
+  background:var(--surface);border:1px solid var(--border);border-radius:28px;
+  padding:22px;box-shadow:var(--shadow);animation:floatSoft 7s ease-in-out infinite;
+}
+.mock-bar{display:flex;gap:6px;margin-bottom:16px}
+.mock-bar i{width:11px;height:11px;border-radius:50%;background:var(--border)}
+.mock-chart{display:flex;align-items:flex-end;gap:10px;height:140px;margin-bottom:16px}
+.mock-chart span{flex:1;border-radius:8px 8px 0 0;background:var(--primary);background:linear-gradient(180deg,var(--primary-2),var(--primary));animation:grow 1.2s ease backwards}
+.mock-chart span:nth-child(1){height:40%}.mock-chart span:nth-child(2){height:65%;animation-delay:.1s}
+.mock-chart span:nth-child(3){height:50%;animation-delay:.2s}.mock-chart span:nth-child(4){height:85%;animation-delay:.3s}
+.mock-chart span:nth-child(5){height:70%;animation-delay:.4s}.mock-chart span:nth-child(6){height:100%;animation-delay:.5s}
+@keyframes grow{from{height:0}}
+.mock-row{display:flex;justify-content:space-between;padding:10px 14px;border-radius:12px;background:var(--bg);margin-top:8px;font-weight:600;font-size:.92rem}
+.mock-row em{font-style:normal;color:#22c55e}
+
+/* ========== 5) البطاقات (خدمات + مميزات) ========== */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+@media (hover:hover){
+  .card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--primary)}
+}
+.ico{
+  width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;margin-bottom:16px;
+  background:var(--primary-soft);
+}
+.card h3{margin-bottom:6px;font-size:1.2rem}
+.card p{color:var(--muted);font-size:.97rem}
+
+/* ========== 6) منهجنا ========== */
+.principle{color:var(--primary);font-weight:700;font-size:.9rem;margin-bottom:10px}
+.t-user{display:flex;align-items:center;gap:12px;margin-top:18px}
+.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;flex-shrink:0;background:var(--primary);background:linear-gradient(135deg,var(--primary),var(--primary-2))}
+.t-user small{color:var(--muted);display:block;line-height:1.3}
+
+/* ========== 7) الأسعار ========== */
+.pricing{align-items:stretch}
+.price-card{position:relative;display:flex;flex-direction:column}
+.price-card.featured{border:2px solid var(--primary);transform:scale(1.03);box-shadow:var(--shadow)}
+@media (hover:hover){
+  .price-card.featured:hover{transform:scale(1.03) translateY(-6px)}
+}
+/* يمنع قفزة البطاقة المميزة بعد حركة الظهور */
+@media (min-width:901px){
+  .js .price-card.featured.reveal{transform:translateY(26px) scale(1.03)}
+  .js .price-card.featured.reveal.show{transform:scale(1.03)}
+}
+.ribbon{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--primary);background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;padding:3px 16px;border-radius:99px;font-size:.82rem;font-weight:700;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.28)}
+.price-from{color:var(--muted);font-weight:600;font-size:.9rem;margin-top:10px;min-height:1.7em}
+.price{font-size:2.6rem;font-weight:900;margin:0 0 10px;line-height:1.3}
+.price .amount{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.price-card ul{margin:14px 0 24px;flex:1}
+.price-card li{padding:7px 0;color:var(--muted);display:flex;gap:10px}
+.price-card li::before{content:"✓";color:var(--primary-2);font-weight:900}
+.price-card .btn{width:100%}
+
+/* ========== 8) FAQ ========== */
+.faq{max-width:760px;margin-inline:auto;display:grid;gap:12px}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.faq-q{
+  width:100%;background:none;border:0;color:var(--text);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:18px 20px;font-weight:700;text-align:start;min-height:56px;
+  -webkit-appearance:none;appearance:none;
+}
+.faq-q span{transition:transform .3s;color:var(--primary);font-size:1.4rem;line-height:1;flex-shrink:0}
+.faq-item.open .faq-q span{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-a p{padding:0 20px 18px;color:var(--muted)}
+
+/* ========== 9) نموذج التواصل ========== */
+.contact-box{
+  max-width:640px;margin-inline:auto;background:var(--surface);
+  border:1px solid var(--border);border-radius:24px;padding:30px;box-shadow:var(--shadow);
+}
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:700;margin-bottom:6px}
+.field input,.field textarea{
+  width:100%;padding:13px 16px;border-radius:14px;border:1.5px solid var(--border);
+  background:var(--bg);color:var(--text);transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.field textarea{min-height:130px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--primary)}
+.field.invalid input,.field.invalid textarea{border-color:#ef4444}
+.error{display:none;color:#ef4444;font-size:.85rem;margin-top:4px}
+.field.invalid .error{display:block}
+.contact-box .btn{width:100%}
+.success{display:none;margin-top:16px;padding:14px;border-radius:14px;background:rgba(34,197,94,.12);color:#16a34a;font-weight:700;text-align:center}
+[data-theme="dark"] .success{color:#4ade80}
+.success.show{display:block}
+.opt{color:var(--muted);font-weight:600;font-size:.85rem}
+.plan-pick{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:14px;background:var(--primary-soft);font-weight:700;font-size:.92rem;margin-bottom:18px}
+.plan-pick button{background:none;border:0;color:var(--text);cursor:pointer;font-size:1.1rem;line-height:1;width:36px;height:36px;border-radius:10px;flex-shrink:0}
+.form-actions{display:grid;gap:12px}
+.form-note{color:var(--muted);font-size:.85rem;margin-top:14px;text-align:center}
+.form-off{padding:14px;border-radius:14px;background:var(--primary-soft);text-align:center;font-weight:600}
+.success a{color:inherit;text-decoration:underline;font-weight:700}
+.wa-direct{max-width:640px;margin:-12px auto 22px;text-align:center}
+.wa-direct .btn{width:100%}
+.wa-direct p{color:var(--muted);font-size:.9rem;margin-top:10px}
+
+/* ========== 10) Footer ========== */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:56px 0 24px}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:32px}
+.foot-grid h4{margin-bottom:12px}
+.foot-grid li{margin-bottom:6px}
+.foot-grid a{color:var(--muted)}
+.foot-grid li a{display:inline-block;padding:5px 0}
+.foot-grid a.logo{color:var(--text)}
+.foot-grid a:hover{color:var(--primary)}
+.foot-grid p{color:var(--muted);margin-top:10px;max-width:320px}
+.copy{text-align:center;color:var(--muted);font-size:.88rem;margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* ========== 11) Animations عند التمرير ========== */
+/* لا تُخفى العناصر إلا إذا كان JavaScript يعمل */
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.js .reveal.show{opacity:1;transform:none}
+
+/* ========== 11-ب) قسم أعمالنا (نماذج توضيحية) ========== */
+.work-card{display:flex;flex-direction:column}
+.work-card p{flex:1}
+.work-card .btn{width:100%}
+.work-thumb{
+  position:relative;aspect-ratio:16/10;border-radius:14px;margin-bottom:16px;overflow:hidden;
+  background:var(--bg);border:1px solid var(--border);
+  display:flex;flex-direction:column;padding:12px;gap:8px;
+}
+.work-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.work-thumb .bar{display:flex;gap:5px}
+.work-thumb .bar i{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.t-line{height:9px;border-radius:6px;background:var(--primary-soft)}
+.t-w70{width:70%}.t-w45{width:45%}.t-w30{width:30%}
+.t-hero{flex:1;border-radius:10px;background:linear-gradient(135deg,var(--primary-soft),rgba(0,206,201,.2))}
+.t-row{display:flex;gap:8px}
+.t-row.sm{height:26px}
+.t-row.grow{flex:1}
+.t-box{flex:1;border-radius:8px;background:var(--primary-soft)}
+.t-side{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.t-pill{height:16px;width:46%;border-radius:99px;background:var(--primary);background:linear-gradient(135deg,var(--primary),var(--primary-2));opacity:.85}
+.t-phone{flex:0 0 34%;border-radius:14px;border:2px solid var(--primary);background:var(--primary-soft);opacity:.6}
+.t-grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:8px}
+.t-grid i{border-radius:8px;background:var(--primary-soft)}
+.t-grid i:nth-child(even){background:rgba(0,206,201,.2)}
+.t-grid i:nth-child(3){background:linear-gradient(135deg,var(--primary),var(--primary-2));opacity:.6}
+.demo-badge{align-self:flex-start;display:inline-block;padding:2px 12px;border-radius:99px;background:var(--primary-soft);color:var(--primary);font-size:.78rem;font-weight:700;margin-bottom:8px}
+.work-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 16px}
+.work-tags span{padding:2px 10px;border-radius:99px;border:1px solid var(--border);color:var(--muted);font-size:.78rem;font-weight:600}
+.work-cta{text-align:center;margin-top:34px}
+.work-cta p{color:var(--muted);margin-bottom:14px}
+
+/* ========== 12) التجاوب ========== */
+@media (max-width:1024px){
+  .menu-btn{display:grid}
+  .nav-cta{display:none}
+  .nav-links{
+    position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;
+    background:var(--bg);max-height:0;overflow:hidden;visibility:hidden;
+    transition:max-height .35s ease,visibility .35s;
+  }
+  .nav-links.open{max-height:80vh;overflow-y:auto;visibility:visible;border-bottom:1px solid var(--border)}
+  .nav-links a{padding:16px 6%;border-top:1px solid var(--border);font-size:1.05rem;color:var(--text)}
+}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .hero p.lead{margin-inline:auto}
+  .hero-btns,.stats{justify-content:center}
+  .cards{grid-template-columns:1fr}
+  .price-card.featured,
+  .price-card.featured:hover{transform:none}
+  .pricing{max-width:480px;margin-inline:auto}
+  .foot-grid{grid-template-columns:1fr}
+}
+@media (min-width:600px) and (max-width:900px){
+  .cards:not(.pricing){grid-template-columns:repeat(2,1fr)}
+  .cards:not(.pricing)>:last-child:nth-child(odd){grid-column:1/-1}
+}
+@media (max-width:480px){
+  section{padding:56px 0}
+  .card{padding:22px}
+  .contact-box{padding:22px 18px}
+  .hero-btns .btn{flex:1 1 100%}
+  .stats{gap:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========== Header ========== -->
+<header>
+  <div class="container nav">
+    <a href="#home" class="logo" aria-label="NOVA">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6c5ce7"/><stop offset="1" stop-color="#00cec9"/></linearGradient></defs>
+        <rect width="40" height="40" rx="12" fill="url(#g)"/>
+        <path d="M11 29V11l18 18V11" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      NOVA
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="القائمة الرئيسية">
+      <a href="#services">الخدمات</a>
+      <a href="#work">أعمالنا</a>
+      <a href="#features">المميزات</a>
+      <a href="#approach">منهجنا</a>
+      <a href="#pricing">الأسعار</a>
+      <a href="#faq">الأسئلة</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button type="button" class="icon-btn" id="themeBtn" aria-label="تبديل الوضع">🌙</button>
+      <a href="#contact" class="btn btn-primary nav-cta">ابدأ الآن</a>
+      <button type="button" class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة" aria-expanded="false" aria-controls="navLinks">☰</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ========== Hero ========== -->
+<section class="hero" id="home">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="container hero-grid">
+    <div class="reveal">
+      <span class="badge"><i></i> تصميم وتطوير مواقع احترافية</span>
+      <h1>نبني لك موقعًا <span class="grad">يعكس علامتك</span> ويجذب عملاءك</h1>
+      <p class="lead">NOVA علامة متخصصة في تصميم وتطوير المواقع الإلكترونية. نصمم ونبرمج صفحات سريعة ومتجاوبة مع كل الأجهزة، بواجهة عصرية تحوّل زوارك إلى عملاء.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">ابدأ مشروعك ←</a>
+        <a href="#services" class="btn btn-ghost">اكتشف خدماتنا</a>
+      </div>
+      <div class="stats">
+        <div><b data-count="3">3</b><span>خدمات متكاملة</span></div>
+        <div><b><bdi data-count="100">100</bdi>%</b><span>تصميم متجاوب</span></div>
+        <div><b data-count="24">24</b><span>ساعة للرد على استفسارك</span></div>
+      </div>
+    </div>
+
+    <div class="reveal" aria-hidden="true">
+      <div class="hero-visual">
+        <div class="mock-bar"><i></i><i></i><i></i></div>
+        <div class="mock-chart"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="mock-row"><span>الزيارات</span><em>↑</em></div>
+        <div class="mock-row"><span>التحويلات</span><em>↑</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== الخدمات ========== -->
+<section id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">خدماتنا</span>
+      <h2>كل ما يحتاجه موقعك في مكان واحد</h2>
+      <p>ثلاث خدمات تغطي موقعك من التصميم إلى الإطلاق والتطوير.</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal"><div class="ico">🎨</div><h3>تصميم الواجهات</h3><p>واجهات عصرية وواضحة تعكس هوية علامتك وتجعل التصفح سهلًا وممتعًا لزوّارك.</p></article>
+      <article class="card reveal"><div class="ico">💻</div><h3>تطوير المواقع</h3><p>مواقع وصفحات هبوط سريعة ومتجاوبة مع كل الشاشات، بكود نظيف وسهل التطوير.</p></article>
+      <article class="card reveal"><div class="ico">🔧</div><h3>التحسين والصيانة</h3><p>تحسين سرعة الموقع وتجربة المستخدم، مع تحديثات وصيانة تحافظ على أدائه.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== أعمالنا ========== -->
+<!-- هذه ثلاثة نماذج توضيحية (Demo) وليست مشاريع عملاء.
+     عند إنجاز مشروع حقيقي: داخل .work-thumb احذفي الرسم وضعي <img src="صورة.jpg" alt="وصف المشروع">،
+     ثم غيّري العنوان والوصف، واحذفي شارة .demo-badge، وغيّري نص الزر وقيمة data-pick. -->
+<section id="work">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">أعمالنا</span>
+      <h2>نماذج من أسلوب تصميمنا</h2>
+      <p>هذه ثلاثة نماذج توضيحية (Demo) صممناها لإظهار أسلوبنا، وهي ليست مشاريع لعملاء حقيقيين. ستُضاف مشاريع العملاء هنا عند اكتمالها.</p>
+    </div>
+    <div class="cards">
+      <article class="card work-card reveal">
+        <div class="work-thumb" aria-hidden="true">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="t-line t-w70"></div>
+          <div class="t-hero"></div>
+          <div class="t-row sm"><div class="t-box"></div><div class="t-box"></div><div class="t-box"></div></div>
+        </div>
+        <span class="demo-badge">نموذج توضيحي</span>
+        <h3>موقع تعريفي لشركة</h3>
+        <p>نموذج لموقع شركة خدمات: صفحة رئيسية واضحة، عرض للخدمات، وزر تواصل بارز.</p>
+        <div class="work-tags"><span>موقع تعريفي</span><span>متجاوب</span><span>وضع داكن</span></div>
+        <a href="#contact" class="btn btn-ghost" data-pick="مشروع مشابه لنموذج: موقع تعريفي لشركة">اطلب مشروعًا مشابهًا</a>
+      </article>
+      <article class="card work-card reveal">
+        <div class="work-thumb" aria-hidden="true">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="t-row grow">
+            <div class="t-side"><div class="t-line t-w70"></div><div class="t-line t-w45"></div><div class="t-line t-w30"></div><div class="t-pill"></div></div>
+            <div class="t-phone"></div>
+          </div>
+        </div>
+        <span class="demo-badge">نموذج توضيحي</span>
+        <h3>صفحة هبوط لتطبيق</h3>
+        <p>نموذج صفحة تركّز على رسالة واحدة وزر إجراء واضح لتحويل الزائر إلى مستخدم.</p>
+        <div class="work-tags"><span>صفحة هبوط</span><span>زر إجراء</span><span>سريع التحميل</span></div>
+        <a href="#contact" class="btn btn-ghost" data-pick="مشروع مشابه لنموذج: صفحة هبوط لتطبيق">اطلب مشروعًا مشابهًا</a>
+      </article>
+      <article class="card work-card reveal">
+        <div class="work-thumb" aria-hidden="true">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="t-line t-w45"></div>
+          <div class="t-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <span class="demo-badge">نموذج توضيحي</span>
+        <h3>معرض أعمال شخصي</h3>
+        <p>نموذج موقع لمستقل أو مصمم: الأعمال منظمة في شبكة أنيقة مع تعريف مختصر ووسيلة تواصل.</p>
+        <div class="work-tags"><span>معرض أعمال</span><span>شبكة مشاريع</span><span>متجاوب</span></div>
+        <a href="#contact" class="btn btn-ghost" data-pick="مشروع مشابه لنموذج: معرض أعمال شخصي">اطلب مشروعًا مشابهًا</a>
+      </article>
+    </div>
+    <div class="work-cta reveal">
+      <p>هل لديك مشروع؟ ابدأ معنا ويكون من أوائل الأعمال المعروضة هنا.</p>
+      <a href="#contact" class="btn btn-primary">ابدأ مشروعك ←</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== المميزات ========== -->
+<section id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">لماذا NOVA؟</span>
+      <h2>مميزات تصنع الفرق</h2>
+      <p>تفاصيل صغيرة تعطي تجربة كبيرة.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal"><div class="ico">⚡</div><h3>سرعة عالية</h3><p>كود خفيف بدون مكتبات ثقيلة لتحميل فوري.</p></div>
+      <div class="card reveal"><div class="ico">📱</div><h3>متجاوب بالكامل</h3><p>تصميم يبدأ من الهاتف أولًا ثم يتوسع للشاشات الأكبر.</p></div>
+      <div class="card reveal"><div class="ico">🌗</div><h3>وضع داكن وفاتح</h3><p>يتذكر اختيار الزائر ويريح عينيه في أي وقت.</p></div>
+      <div class="card reveal"><div class="ico">🔒</div><h3>خصوصية أولًا</h3><p>نحترم خصوصيتك ونحمي بياناتك في كل خطوة من التعاون.</p></div>
+      <div class="card reveal"><div class="ico">🧩</div><h3>سهل التطوير</h3><p>بنية منظمة تسهّل التحديث والتوسع مع نمو مشروعك.</p></div>
+      <div class="card reveal"><div class="ico">♿</div><h3>سهولة الوصول</h3><p>أزرار كبيرة وتباين جيد ودعم لتقليل الحركة.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== منهجنا (مبادئ العمل) ========== -->
+<section id="approach">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">منهجنا</span>
+      <h2>ما نلتزم به معك</h2>
+      <p>ثلاثة مبادئ نبني عليها كل مشروع نعمل عليه.</p>
+    </div>
+    <div class="cards">
+      <div class="card t-card reveal"><div class="principle">المبدأ الأول</div><p>نبدأ بفهم هدفك وجمهورك قبل أي تصميم، لتخرج النتيجة مناسبة لعلامتك وليست قالبًا جاهزًا.</p>
+        <div class="t-user"><div class="avatar">١</div><div><b>وضوح الهدف</b><small>فهم قبل التنفيذ</small></div></div></div>
+      <div class="card t-card reveal"><div class="principle">المبدأ الثاني</div><p>نعمل بتواصل واضح وخطوات محددة، فتعرف دائمًا أين وصل مشروعك وما الخطوة التالية.</p>
+        <div class="t-user"><div class="avatar">٢</div><div><b>شفافية في العمل</b><small>تواصل مستمر</small></div></div></div>
+      <div class="card t-card reveal"><div class="principle">المبدأ الثالث</div><p>نهتم بالتفاصيل والأداء وتجربة الهاتف، لأن الانطباع الأول هو ما يحدد قرار زائرك.</p>
+        <div class="t-user"><div class="avatar">٣</div><div><b>جودة في التفاصيل</b><small>تجربة تبدأ من الهاتف</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== الأسعار ========== -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">الأسعار</span>
+      <h2>باقات تناسب كل مرحلة</h2>
+      <p>باقات واضحة تناسب حجم مشروعك. يُحدَّد السعر النهائي بعد مناقشة التفاصيل.</p>
+    </div>
+    <div class="cards pricing" id="pricingGrid"></div>
+    <noscript><p style="text-align:center;color:var(--muted)">يلزم تفعيل JavaScript لعرض الباقات. تواصل معنا وسنرسل لك التفاصيل.</p></noscript>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">الأسئلة الشائعة</span>
+      <h2>أجوبة سريعة</h2>
+    </div>
+    <div class="faq reveal" id="faq-list">
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false">ما الذي تقدمه NOVA؟<span aria-hidden="true">+</span></button>
+        <div class="faq-a"><p>نقدّم تصميم الواجهات وتطوير المواقع وصفحات الهبوط، مع التحسين والصيانة، لتظهر علامتك بشكل احترافي وتصل إلى جمهورها.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false">كيف أبدأ مشروعي معكم؟<span aria-hidden="true">+</span></button>
+        <div class="faq-a"><p>أرسل لنا فكرتك عبر نموذج التواصل، وسنتواصل معك لمناقشة التفاصيل وتحديد الباقة الأنسب لك.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false">هل يمكنني تخصيص التصميم؟<span aria-hidden="true">+</span></button>
+        <div class="faq-a"><p>بالتأكيد، نصمم الألوان والنصوص والأقسام بما يتوافق مع هوية علامتك وأهدافك.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false">هل يعمل الموقع جيدًا على الهاتف؟<span aria-hidden="true">+</span></button>
+        <div class="faq-a"><p>نعم، نبني كل صفحة بأسلوب خفيف ومتجاوب لتعمل بسلاسة على الهواتف والتابلت والكمبيوتر.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false">كم يستغرق تنفيذ المشروع؟<span aria-hidden="true">+</span></button>
+        <div class="faq-a"><p>يعتمد ذلك على حجم المشروع واحتياجاتك، ونحدد الجدول الزمني بوضوح بعد مناقشة التفاصيل معك.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== التواصل ========== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">تواصل معنا</span>
+      <h2>لنبدأ مشروعك</h2>
+      <p>أخبرنا عن فكرتك وسنتواصل معك لمناقشة التفاصيل.</p>
+    </div>
+    <div class="wa-direct" id="waDirectBox" hidden>
+      <a id="waDirect" class="btn btn-primary" target="_blank" rel="noopener">💬 تواصل مباشرة عبر واتساب</a>
+      <p>أو اكتب تفاصيل مشروعك في النموذج أدناه.</p>
+    </div>
+    <div class="contact-box reveal">
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="name">الاسم</label>
+          <input id="name" name="name" type="text" placeholder="اسمك الكامل" autocomplete="name" maxlength="80" aria-describedby="name-err">
+          <div class="error" id="name-err">الرجاء إدخال اسمك (حرفان على الأقل).</div>
+        </div>
+        <div class="field">
+          <label for="message">تفاصيل مشروعك</label>
+          <textarea id="message" name="message" placeholder="اكتب تفاصيل مشروعك..." maxlength="600" aria-describedby="message-err"></textarea>
+          <div class="error" id="message-err">الرسالة يجب ألا تقل عن 10 أحرف.</div>
+        </div>
+        <p class="plan-pick" id="planPick" hidden><span id="planPickText"></span><button type="button" id="planClear" aria-label="إزالة الاختيار">✕</button></p>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btnPrimary">إرسال الرسالة</button>
+        </div>
+        <p class="form-off" id="formOff" hidden>نموذج التواصل قيد الإعداد حاليًا.</p>
+        <p class="form-note" id="formNote">عند الضغط يُفتح واتساب برسالة جاهزة لتراجعها وترسلها بنفسك. هذا الموقع لا يخزّن بياناتك.</p>
+        <div class="success" id="success" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ========== Footer ========== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a href="#home" class="logo">NOVA</a>
+        <p>علامة لتصميم وتطوير المواقع الإلكترونية، نبني حضورًا رقميًا حديثًا للأفراد والشركات.</p>
+      </div>
+      <div>
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="#services">الخدمات</a></li>
+          <li><a href="#work">أعمالنا</a></li>
+          <li><a href="#pricing">الأسعار</a></li>
+          <li><a href="#faq">الأسئلة الشائعة</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>تواصل</h4>
+        <ul>
+          <li><a href="#contact">نموذج التواصل</a></li>
+          <li id="footWa" hidden><a href="#contact" target="_blank" rel="noopener">واتساب</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="copy">© <span id="year">2026</span> NOVA — جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<script>
+/* ========== JS: منظم في وحدات صغيرة ========== */
+
+/* ==========================================================
+   إعدادات الموقع: هذا هو المكان الوحيد الذي تحتاجين تعديله
+   (لا تضعي هنا كلمات مرور أو مفاتيح سرية أبدًا، فكل ما في الملف يراه الزوار)
+   ========================================================== */
+
+/* أ) وسائل التواصل */
+var CONTACT = {
+  whatsapp: "963997179644", /* رقم واتساب بصيغة دولية، بدون + أو مسافات */
+  countryCode: "963",       /* رمز بلدك (سوريا 963). يُستخدم فقط إذا بدأ الرقم بصفر */
+  message: "مرحباً، تواصلت معكم من موقع NOVA وأرغب بالاستفسار عن خدمات تصميم وتطوير المواقع." /* الرسالة الجاهزة لزر واتساب */
+};
+
+/* ب) الباقات والأسعار (غيّري الاسم أو السعر أو المزايا كما تشائين) */
+var PRICING = {
+  currency: "$",
+  from: "ابتداءً من",
+  button: "اطلب هذه الباقة",
+  plans: [
+    {
+      name: "البداية",
+      price: "49",
+      features: ["صفحة هبوط واحدة", "تصميم متجاوب", "نموذج تواصل", "تسليم الملفات كاملة"]
+    },
+    {
+      name: "الاحترافية",
+      price: "129",
+      featured: true,            /* الباقة المميزة (واحدة فقط) */
+      badge: "الأكثر طلبًا",
+      features: ["حتى 5 صفحات", "وضع داكن وفاتح", "تحسين السرعة والأداء", "دعم بعد التسليم"]
+    },
+    {
+      name: "الأعمال",
+      price: "299",
+      features: ["صفحات حسب الحاجة", "تصميم مخصص بالكامل", "تحسين أساسي لمحركات البحث", "صيانة وتحديثات"]
+    }
+  ]
+};
+
+/* ==========================================================
+   من هنا فصاعدًا لا حاجة للتعديل
+   ========================================================== */
+
+/* 0) رسم بطاقات الأسعار من الإعدادات أعلاه */
+(function pricing(){
+  var grid = document.getElementById('pricingGrid');
+  if (!grid) return;
+  function el(tag, cls, text){
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  PRICING.plans.forEach(function(p){
+    var card = el('div', 'card price-card reveal' + (p.featured ? ' featured' : ''));
+    if (p.badge) card.appendChild(el('span', 'ribbon', p.badge));
+    card.appendChild(el('h3', '', p.name));
+    card.appendChild(el('div', 'price-from', PRICING.from || ''));
+    var shown = /^\d/.test(String(p.price)) ? (PRICING.currency || '') + p.price : String(p.price);
+    var price = el('div', 'price');
+    price.appendChild(el('span', 'amount', shown));
+    card.appendChild(price);
+    var ul = el('ul');
+    (p.features || []).forEach(function(t){ ul.appendChild(el('li', '', t)); });
+    card.appendChild(ul);
+    var a = el('a', 'btn ' + (p.featured ? 'btn-primary' : 'btn-ghost'), PRICING.button);
+    a.href = '#contact';
+    a.setAttribute('data-pick', 'الباقة: ' + p.name);
+    card.appendChild(a);
+    grid.appendChild(card);
+  });
+})();
+
+/* 1) الوضع الداكن/الفاتح (القيمة الأولية تُضبط في <head>) */
+(function theme(){
+  var root = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  var meta = document.querySelector('meta[name="theme-color"]');
+
+  function apply(mode){
+    root.setAttribute('data-theme', mode);
+    btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+    btn.setAttribute('aria-label', mode === 'dark' ? 'التبديل إلى الوضع الفاتح' : 'التبديل إلى الوضع الداكن');
+    if (meta) meta.setAttribute('content', mode === 'dark' ? '#0b0d1a' : '#f7f8fc');
+  }
+  apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+  btn.addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('nova-theme', next); } catch(e){}
+  });
+})();
+
+/* 2) قائمة الهاتف */
+(function mobileMenu(){
+  var btn = document.getElementById('menuBtn');
+  var links = document.getElementById('navLinks');
+  function set(open){
+    links.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? '✕' : '☰';
+  }
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    set(!links.classList.contains('open'));
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ set(false); });
+  });
+  document.addEventListener('click', function(e){
+    if (links.classList.contains('open') && !links.contains(e.target)) set(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') set(false);
+  });
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 1024) set(false);
+  });
+})();
+
+/* 3) ظهور العناصر عند التمرير */
+(function reveal(){
+  var items = document.querySelectorAll('.reveal');
+  function done(el){
+    el.classList.add('show');
+    /* نزيل كلاس reveal بعد انتهاء الحركة حتى لا يتعارض مع تأثيرات hover */
+    setTimeout(function(){ el.classList.remove('reveal', 'show'); }, 900);
+  }
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function(i){ i.classList.remove('reveal'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ done(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: .1 });
+  items.forEach(function(i){ io.observe(i); });
+})();
+
+/* 4) عدّاد الأرقام */
+(function counters(){
+  var nums = document.querySelectorAll('[data-count]');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window) || reduce) return; /* تبقى القيم النهائية ظاهرة */
+
+  function run(el){
+    var target = +el.dataset.count, n = 0;
+    var step = Math.max(1, Math.ceil(target / 50));
+    el.textContent = '0';
+    var t = setInterval(function(){
+      n += step;
+      if (n >= target){ n = target; clearInterval(t); }
+      el.textContent = n;
+    }, 30);
+  }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){ run(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: .6 });
+  nums.forEach(function(n){ io.observe(n); });
+})();
+
+/* 5) FAQ تفاعلي (يفتح عنصرًا واحدًا فقط) */
+(function faq(){
+  var items = document.querySelectorAll('.faq-item');
+
+  function close(item){
+    item.classList.remove('open');
+    item.querySelector('.faq-a').style.maxHeight = null;
+    item.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+  }
+  items.forEach(function(item){
+    var q = item.querySelector('.faq-q');
+    var a = item.querySelector('.faq-a');
+    q.addEventListener('click', function(){
+      var wasOpen = item.classList.contains('open');
+      items.forEach(close);
+      if (!wasOpen){
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+        q.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  /* تحديث الارتفاع عند تدوير الشاشة أو تغيّر الخط */
+  function refresh(){
+    var open = document.querySelector('.faq-item.open .faq-a');
+    if (open) open.style.maxHeight = open.scrollHeight + 'px';
+  }
+  window.addEventListener('resize', refresh);
+  window.addEventListener('orientationchange', refresh);
+  window.addEventListener('load', refresh);
+})();
+
+/* 6) نموذج التواصل: واتساب فقط. لا يوجد خادم ولا تُحفظ البيانات. */
+(function form(){
+  var f = document.getElementById('contactForm');
+  var ok = document.getElementById('success');
+  var btn = document.getElementById('btnPrimary');
+  var off = document.getElementById('formOff');
+  var note = document.getElementById('formNote');
+  var pickBox = document.getElementById('planPick');
+  var pickText = document.getElementById('planPickText');
+  var picked = '';
+
+  var rules = {
+    name: function(v){ return v.trim().length >= 2; },
+    message: function(v){ return v.trim().length >= 10; }
+  };
+
+  function waNumber(){
+    var d = String(CONTACT.whatsapp || '').replace(/\D/g, '');
+    if (!d) return '';
+    if (d.indexOf('00') === 0) d = d.slice(2);
+    else if (d.charAt(0) === '0') d = String(CONTACT.countryCode || '').replace(/\D/g, '') + d.replace(/^0+/, '');
+    return (d.length >= 8 && d.length <= 15) ? d : '';
+  }
+  var wa = waNumber();
+
+  function waLink(text){
+    return 'https://wa.me/' + wa + (text ? '?text=' + encodeURIComponent(text) : '');
+  }
+
+  if (!wa){
+    btn.hidden = true;
+    note.hidden = true;
+    off.hidden = false;
+    console.warn('NOVA: أضيفي رقم واتساب صالحًا في CONTACT.');
+  } else {
+    btn.textContent = 'إرسال عبر واتساب';
+    var fw = document.getElementById('footWa');
+    fw.querySelector('a').href = waLink(CONTACT.message || '');
+    fw.hidden = false;
+    document.getElementById('waDirect').href = waLink(CONTACT.message || '');
+    document.getElementById('waDirectBox').hidden = false;
+    note.textContent = 'عند الضغط يُفتح واتساب برسالة جاهزة لتراجعها وترسلها بنفسك. هذا الموقع لا يخزّن بياناتك.';
+  }
+
+  function setPick(text){
+    picked = text || '';
+    pickText.textContent = picked;
+    pickBox.hidden = !picked;
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest ? e.target.closest('[data-pick]') : null;
+    if (t) setPick(t.getAttribute('data-pick'));
+  });
+  document.getElementById('planClear').addEventListener('click', function(){ setPick(''); });
+
+  function check(id){
+    var input = document.getElementById(id);
+    var valid = rules[id](input.value);
+    input.closest('.field').classList.toggle('invalid', !valid);
+    input.setAttribute('aria-invalid', String(!valid));
+    return valid;
+  }
+  Object.keys(rules).forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){
+      ok.classList.remove('show');
+      check(id);
+    });
+  });
+
+  function showResult(url){
+    ok.textContent = '';
+    var msg = document.createElement('span');
+    msg.textContent = '✓ جهّزنا رسالتك. اضغط «إرسال» داخل واتساب لإتمامها، فلم يُرسل شيء بعد.';
+    ok.appendChild(msg);
+    ok.appendChild(document.createElement('br'));
+    var link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'لم يفتح التطبيق؟ اضغط هنا';
+    ok.appendChild(link);
+    ok.classList.add('show');
+  }
+
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!wa) return;
+    var results = Object.keys(rules).map(check);
+    if (!results.every(Boolean)){
+      ok.classList.remove('show');
+      var bad = f.querySelector('.invalid input, .invalid textarea');
+      if (bad) bad.focus();
+      return;
+    }
+    var name = document.getElementById('name').value.trim();
+    var details = document.getElementById('message').value.trim();
+    var lines = ['مرحبًا NOVA،', 'الاسم: ' + name];
+    if (picked) lines.push('الباقة أو النموذج المختار: ' + picked);
+    lines.push('تفاصيل المشروع: ' + details);
+    var url = waLink(lines.join('\n'));
+    showResult(url);
+    var opened = window.open(url, '_blank');
+    if (opened){ try { opened.opener = null; } catch(err){} }
+    setTimeout(function(){
+      f.reset();
+      Object.keys(rules).forEach(function(id){
+        document.getElementById(id).removeAttribute('aria-invalid');
+      });
+      setPick('');
+    }, 1500);
+  });
+})();
+
+/* 7) سنة الحقوق */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
